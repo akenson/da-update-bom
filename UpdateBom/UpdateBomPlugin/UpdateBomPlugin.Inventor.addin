@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Addin Type="Plugin">
+  <ClassId>{5084ca1c-b6f0-41dc-b21d-f941c556a7ae}</ClassId>
+  <ClientId>{5084ca1c-b6f0-41dc-b21d-f941c556a7ae}</ClientId>
+  <DisplayName>UpdateBomPlugin</DisplayName>
+  <Description>a UpdateBomPlugin</Description>
+  <Assembly>UpdateBomPlugin.dll</Assembly>
+</Addin>
