@@ -50,7 +50,7 @@ namespace UpdateBomPlugin
             LogTrace("Running Update BOM...");
             string currDir = Directory.GetCurrentDirectory();
 
-            LogTrace("currDir: " + currDir);
+
             // For local debugging
             //string inputPath = System.IO.Path.Combine(currDir, @"../../inputFiles", "params.json");
             //Dictionary<string, string> options = JsonConvert.DeserializeObject<Dictionary<string, string>>(System.IO.File.ReadAllText(inputPath));
@@ -60,7 +60,6 @@ namespace UpdateBomPlugin
             string projectFile = options["projectFile"];
 
             string assemblyPath = Path.GetFullPath(Path.Combine(currDir, inputFile));
-
             string fullProjectPath = Path.GetFullPath(Path.Combine(currDir, projectFile));
 
             Console.WriteLine("fullProjectPath = " + fullProjectPath);
@@ -103,6 +102,7 @@ namespace UpdateBomPlugin
             {
                 LogError("Bom failed: " + e.ToString());
             }
+        
         }
 
         public void GetBomRowProperties(BOMRowsEnumerator rows, JArray bomRows)
@@ -135,6 +135,24 @@ namespace UpdateBomPlugin
             }
         }
 
+        static void DirPrint(string sDir)
+        {
+            try
+            {
+                foreach (string d in Directory.GetDirectories(sDir))
+                {
+                    foreach (string f in Directory.GetFiles(d))
+                    {
+                        LogTrace("file: " + f);
+                    }
+                    DirPrint(d);
+                }
+            }
+            catch (System.Exception excpt)
+            {
+                Console.WriteLine(excpt.Message);
+            }
+        }
 
         #region Logging utilities
 
