@@ -85,17 +85,44 @@ namespace UpdateBomPlugin
         {
             try
             {
-                AssemblyDocument assemblyDoc = doc as AssemblyDocument;
-                AssemblyComponentDefinition componentDef = assemblyDoc.ComponentDefinition;
-                BOM bom = componentDef.BOM;
-                BOMViews bomViews = bom.BOMViews;
-                BOMView structureView = bomViews["Structured"];
+                if (doc.DocumentType == DocumentTypeEnum.kPartDocumentObject)
+                {
+                    LogTrace("Part Document");
+                    // Parts don't have a BOM
+                    LogTrace("Writing out empty bomRows.json");
+                    File.WriteAllText("bomRows.json", "No BOM");
+                }
+                else if (doc.DocumentType == DocumentTypeEnum.kAssemblyDocumentObject)
+                {
+                    LogTrace("Assembly Document");
+                    AssemblyComponentDefinition assemblyComponentDef = ((AssemblyDocument)doc).ComponentDefinition;
+                    BOM bom = assemblyComponentDef.BOM;
+                    BOMViews bomViews = bom.BOMViews;
+                    BOMView structureView = bomViews["Structured"];
 
-                JArray bomRows = new JArray();
-                GetBomRowProperties(structureView.BOMRows, bomRows);
+                    JArray bomRows = new JArray();
+                    GetBomRowProperties(structureView.BOMRows, bomRows);
 
-                LogTrace("Writing out bomRows.json");
-                File.WriteAllText("bomRows.json", bomRows.ToString());
+                    LogTrace("Writing out bomRows.json");
+                    File.WriteAllText("bomRows.json", bomRows.ToString());
+
+                }
+                else
+                {
+                    LogTrace("Unknown Document");
+                    // unsupported doc type, throw exception
+                    throw new Exception("Unsupported document type: " + doc.DocumentType.ToString());
+                }
+
+                ////BOM bom = componentDef.BOM;
+                //BOMViews bomViews = bom.BOMViews;
+                //BOMView structureView = bomViews["Structured"];
+
+                //JArray bomRows = new JArray();
+                //GetBomRowProperties(structureView.BOMRows, bomRows);
+
+                //LogTrace("Writing out bomRows.json");
+                //File.WriteAllText("bomRows.json", bomRows.ToString());
 
             }
             catch (Exception e)
